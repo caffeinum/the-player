@@ -1,0 +1,20 @@
+<html>
+	<head>
+		<title>The Player</title>
+		<link href="style.css" type="text/css" rel="stylesheet" />
+	</head>
+<body>
+	<script type="text/javascript">
+		window.onload = function () {
+			var a = new Auth();
+			a.getAccessToken( function (token) {
+				alert(token);
+			});
+		}
+	
+	</script>
+	
+	
+	<script type="text/javascript" src="../js/auth.js"></script>
+</body>
+</html>
