@@ -1,0 +1,29 @@
+<html>
+	<head>
+		<title>The Player</title>
+		<link href="style.css" type="text/css" rel="stylesheet" />
+	</head>
+<body>
+	<div id="controls">
+		<a href="#" class="like" onclick="player.like()">
+			<span class="button">like</span><img />
+		</a>
+		<a href="#" class="play" onclick="player.toggle()">
+			<span class="button">play</span><img />
+		</a>
+		<a href="#" class="next" onclick="player.next()">
+			<span class="button">next</span><img />
+		</a>
+	</div>
+	
+	<div class="artwork">
+		<img id="artwork-1" src="artwork/img1.jpg" />
+		<img id="artwork-2" src="artwork/img2.jpg" />
+	
+	</div>
+	
+	<script type="text/javascript" src="js/app.js"></script>
+	<script type="text/javascript" src="js/mixer.js"></script>
+	<script type="text/javascript" src="js/recommender.js"></script>
+</body>
+</html>
