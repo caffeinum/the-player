@@ -1,0 +1,20 @@
+<html>
+	<head>
+		<title>The Player</title>
+		<link href="style.css" type="text/css" rel="stylesheet" />
+		<script type="text/javascript" src="../js/track.js"></script>
+		<script type="text/javascript" src="../js/mixer.js"></script>
+	</head>
+<body>
+	
+	
+	<script type="text/javascript">
+		window.onload = function () {
+			var mixer = new Mixer();
+			var track = new Track( '/music/track1.mp3' );
+			document.write( mixer.bpm( track ) );
+		}
+	
+	</script>
+</body>
+</html>
