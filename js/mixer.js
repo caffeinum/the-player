@@ -1,31 +1,36 @@
 var Mixer = function () {
-	// constructor
+    var context = new webkitAudioContext();
+
+    // constructor
 	this.current = null;
 	this.next = null;
     
 	var audio = null; // anything...
 	
-	this.play = function () {};
+	this.play = function () {
+        context.decodeAudioData(request.response, function(response) {
+            source.buffer = response;
+            //beatFind(source.buffer);
+            
+            source.start();
+        }, function () { console.error('The request failed.'); } );
+    };
+    
 	this.pause = function () {};
 	this.load = function ( track ) {
-		this.current = track;
+        var source = context.createBufferSource();
+        
+        // use $.get !!
+        var request = new XMLHttpRequest();
+        
+        request.open('GET', track.url, true); 
+        request.responseType = 'arraybuffer';
+        request.send();
 	};
 	
 	this.prepare = function ( track ) {
 		// load track into the deck2
-        var context = new webkitAudioContext();
 
-        var source = context.createBufferSource();
-        var request = new XMLHttpRequest();
-        request.open('GET', track.url, true); 
-        request.responseType = 'arraybuffer';
-        request.onload = function() {
-            context.decodeAudioData(request.response, function(response) {
-                source_s.buffer = response;
-                beatFind(source_s.buffer);
-            }, function () { console.error('The request failed.'); } );
-        }
-        request.send();
     };
 	
 	this.mix = function () {
