@@ -2,16 +2,22 @@ var Auth = function () {
 	
 	
 		this.getAccessToken = function ( handler ) {
+            var token = '';
 			/*jQuery.getJSON('https://oauth.vk.com/access_token?' + 
 						  'client_id=' + config.app_id +
 						  '&client_secret=' + config.secret + 
 						  '&v=5.1&grant_type=client_credentials',
 						  handler);*/
             //
-            var newWin = window.open("https://oauth.vk.com/authorize?client_id=" + "4782453" + "&scope=friends,audio&redirect_uri=https://oauth.vk.com/blank.html&display=popup&v=5.28&response_type=token", "AuthForm", "width=200");
+            var url = "https://oauth.vk.com/authorize?client_id=" + config.app_id + 
+                "&scope=friends,audio&redirect_uri=/redirect.html&display=popup&v=5.28&response_type=code";
+            var newWin = window.open(url, "AuthForm", "width=200");
+            newWin.onload = function () {
+                console.log( newWin );
+            }
+            token = '';
             
-            
-            console.log( newWin );
+            handler( token );
             //jQuery.getJSON('https://oauth.vk.com/blank.html', handler);
 
 		};
