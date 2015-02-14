@@ -1,0 +1,4 @@
+config = {
+	lastFMApiKey : '',
+	appName: 'player'
+}
