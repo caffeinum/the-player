@@ -1,6 +1,6 @@
 config = {
 	lastFMApiKey : '',
 	appName: 'player',
-	app_id: '4781852',
-	secret: 'BcncB3ArniJVzK1QAsMz'
+	app_id: '4782453',
+	secret: '0GS4kAeZvvdFi8SmGhSG'
 }
