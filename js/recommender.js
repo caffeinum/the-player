@@ -32,6 +32,7 @@ var Recommender = function () {
                 track.metadata.album.images = data.similartracks.track[i].images[3]["#text"];
                 track.metadata.match = data.similartracks.track[i].match;
                 track.liked.value = 0;
+                TRACKS.push(track);
             };
         });
 	};
