@@ -1,77 +1,91 @@
 var Mixer = function () {
     var context = new webkitAudioContext();
+	
+	var Deck = function () {
+		this.gain = context.createGain();
+		this.gain.connect( context.destination );
 
-    // constructor
-	this.current = this.next = {
-		gain: null,
-		request: null,
-		source: null
+		this.source = context.createBufferSource();
 	};
-    
-	var request, source;
-    this.current.gain	= context.createGain(), 
-    this.next.gain		= context.createGain();
-    this.current.gain.connect( context.destination );
-    this.next	.gain.connect( context.destination );
-	var audio = null; // anything...
+	Deck.prototype = {
+		load: function ( track ) {
+			this.track = track;
+		},
+		cache: function () {
+			var current = this;
+
+			if ( ! this.track.url ) return console.log( 'Cant cache dont loaded' );
+
+			current.request = new XMLHttpRequest();
+
+			current.request.open('GET', this.track.url, true); 
+			current.request.responseType = 'arraybuffer';
+			current.request.onload = function () {
+				context.decodeAudioData(current.request.response, function( response ) {
+					current.source.buffer = response;
+					current.source.connect( current.gain );
+				}, function () { console.error('The request failed.'); } );
+			};
+			current.request.send();
+		}
+	};
+
+	var current	= new Deck();
+	var next	= new Deck();
+	
+	this.playing = false;
 	
 	this.load = function ( track ) {
-        this.current.source = context.createBufferSource();    
-        // use $.get !!
-        this.current.request = new XMLHttpRequest();
-        
-        this.current.request.open('GET', track.url, true); 
-        this.current.request.responseType = 'arraybuffer';
-        this.current.request.send();
+		current.load( track );
+		current.cache();
 		
-		this.current.request.onload = this.play;
+		return;
 	};
 	
-	this.play = function () {
-		if ( ! this.current ) return;
-        context.decodeAudioData(this.current.request.response, function( response ) {
-            this.current.source.buffer = response;
-            //beatFind(source.buffer);
-			
-            this.current.source = source;            
-            this.current.source.connect( gain_current );
-            
-            this.current.source.start(0);
-        }, function () { console.error('The request failed.'); } );
-    };
-    
-	this.pause = function () {};
 	this.prepare = function ( track ) {
 		// load track into the deck2
-        this.next.source = context.createBufferSource();
-        //buffer? cache?
+		next = new Deck();
+		next.load( track );
+		next.cache();
 		
-		this.next.request = new XMLHttpRequest();
-        
-        this.next.request.open('GET', track.url, true); 
-        this.next.request.responseType = 'arraybuffer';
-        this.next.request.send();
-		
-        this.next.source.buffer = null;
-        this.next.source.connect( gain_next );
+		return;		
     };
+	
+	this.play = function () {
+		this.playing = true;
+        current.source.start(0);
+    };
+	this.pause = function () {
+		this.playing = false;
+        current.source.stop(0);
+	};
+	
+	this.toggle = function () {
+		if ( this.playing )
+			this.pause();
+		else
+			this.play();
+	};
 	
 	this.mix = function () {
 		// skips to the deck2
-        //this.next.start(0);
-        //gain_next.gain = 0;
-        var int = setInterval(function(){
-            this.current.gain.gain.value -= 0.002;
-            this.next.gain.gain.value += 0.002;
+
+		next.source.start(0);
+		next.gain.gain.value = 0;
+		
+		var int = setInterval(function(){
+            current.gain.gain.value -= 0.002;
+            next.gain.gain.value += 0.002;
 			
-			if ( this.current.gain.gain.value <= 0 ) {
-    			this.current.source.stop(0);
+			if ( current.gain.gain.value <= 0 ) {
+    			current.source.stop(0);
 				
+				current = next;
+				next = null;
 				// interchange
 				clearInterval( int );
 			}	
 		}, 10);
 		
 	};
-    //change places;
 };

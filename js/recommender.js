@@ -12,6 +12,7 @@ var Recommender = function () {
             return data.track.album.title;
         });
     };
+	this.like = function () {};
     
 	this.pushNextTrack = function ( currentTrack ) {
 		// get tracks

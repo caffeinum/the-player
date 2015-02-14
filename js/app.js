@@ -6,15 +6,15 @@ window.onload = function (artwork1, artwork2) {
 	
 	mixer = new Mixer();
 	rec = new Recommender();
-	billy = new Track('/music/track2.mp3', null);
-	next = new Track('/music/track3.mp3', null);
+	billy = new Track('/music/track3.mp3', null);
+	seven = new Track('/music/track4.mp3', null);
 	
 	mixer.load( billy );
-	mixer.prepare( next );
+	mixer.prepare( seven );
 	
 	player = {
-		like: rec.like,
-		toggle: mixer.play,
-		next: mixer.mix
+		like: rec.like.bind(rec, mixer.current),
+		toggle: mixer.toggle.bind(mixer),
+		next: mixer.mix.bind(mixer)
 	};
 }
