@@ -1,4 +1,4 @@
-var Recommender = function () {
+var Recommender = function (access_token) {
 	// constructor
 	var TRACKS = this.tracks = [];
 	
@@ -32,11 +32,30 @@ var Recommender = function () {
                 track.metadata.album.name = getAlbum(track.metadata.name, metadata.artist.name);
                 track.metadata.album.images = data.similartracks.track[i].images[3]["#text"];
                 track.metadata.match = data.similartracks.track[i].match;
-                track.liked.value = 0;
+                //track.liked = true;
+                track.rating = /* Number(track.liked) */+Number(track.metadata.match);
                 TRACKS.push(track);
+                
             };
         });
 	};
     
+    /*this.onLikeClicked = function(currentTrack){
+        currentTrack.liked = currentTrack.liked;
+    };*/
+    
+    this.sortByRating = function(){
+        TRACKS.sort(function(track1, track2){
+            return track2.rating - track1.rating
+        });
+    };
+    
+    this.getAudio = function(track, artist){
+        //query to VK API
+        var url = "https://api.vk.com/method/audio.search?q="+track+" "+artist+"&count=3&access_token=ACCESS_TOKEN"
+        jQuery.getJSON(encodeURI(url), function( data ) {
+           
+        });
+    };
     
 };
