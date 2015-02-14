@@ -5,6 +5,12 @@ var Mixer = function () {
 	
 	var audio = null; // anything...
 	
+	this.play = function () {};
+	this.pause = function () {};
+	this.load = function ( track ) {
+		this.current = track;
+	};
+	
 	this.prepare = function ( track ) {
 		// load track into the deck2
 	};
