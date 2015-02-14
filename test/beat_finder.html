@@ -1,0 +1,128 @@
+<html>
+<head>
+<script type="text/javascript">
+    var threshold;
+  function beatFind(buffer){
+  var peaksArray = [];
+  var length = buffer.length;
+  threshold = 0;
+  for(var i = 0; i < length; i++) { 
+      threshold += buffer[i]*buffer[i]/length;
+        }
+  for(var i = 0; i < length; i++) {
+    if (buffer[i]*buffer[i] > threshold) {
+      peaksArray.push((i+5000)/44.1);
+      i += 10000;
+    }
+    i++;
+  }
+  return peaksArray;
+}
+
+
+function timer(i, peaksArray) {
+    setTimeout(function(){
+        document.body.style.background = "black";
+        setTimeout(function () {
+            document.body.style.background = "white";
+        }, 1);
+        timer(i + 1, peaksArray)},
+               peaksArray[i] - peaksArray[i-1]);
+}
+    
+    
+  function low_rendering(buffer, handler){
+      var OfflineContext = new webkitOfflineAudioContext(1, buffer.length, buffer.sampleRate);
+      var source = OfflineContext.createBufferSource();
+      source.buffer = buffer;
+          
+      var lowpass = OfflineContext.createBiquadFilter();
+      lowpass.type = "lowpass";
+      source.connect(lowpass);
+      lowpass.connect(OfflineContext.destination);
+      OfflineContext.startRendering();
+      source.start(0);
+      console.log( source );
+      OfflineContext.oncomplete = function(e) {
+          var filteredBuffer = e.renderedBuffer;
+          
+          handler(filteredBuffer);
+      }; 
+  }
+
+  function mixer(url_s, url_f) {
+
+  var context = new webkitAudioContext();
+
+  var source_s = context.createBufferSource();  
+       
+  var request = new XMLHttpRequest();
+  request.open('GET', url_s, true); 
+  request.responseType = 'arraybuffer';
+  request.onload = function() {
+  context.decodeAudioData(request.response, function(response) {
+  source_s.buffer = response;
+  var canvas_line = document.getElementById('canvas_line');
+  canv = canvas_line.getContext('2d');
+  source_s.connect ( context.destination );
+        source_s.start(0);
+         
+  low_rendering(source_s.buffer, function (filteredBuffer) {
+    var peaksArray = beatFind(filteredBuffer.getChannelData(0));
+        var buffer = source_s.buffer.getChannelData(0);
+    setInterval(function () {
+        i++;
+       
+        canv.clearRect(0,0,1280,700);
+      canv.beginPath();
+    canv.lineWidth = 1;
+      canv.strokeStyle = "#000000";
+      canv.moveTo(0,350);
+            for ( j = 0; j < 1280; j++ )
+                canv.lineTo(j, 350 +  buffer[i * 4410 + (j - 100)*88.2] * buffer[i * 4410 + (j - 100)*88.2] * 200);
+        canv.stroke();
+      canv.beginPath();
+      canv.strokeStyle = "#ff0000";
+      canv.moveTo(0,Math.sqrt(threshold)*200);
+      canv.lineTo(1280,Math.sqrt(threshold)*200);
+      canv.moveTo(100,700);
+      canv.lineTo(100,0);
+        canv.stroke();
+      canv.beginPath();
+      canv.strokeStyle = "#00ff00";
+    canv.lineWidth = 3;
+      canv.moveTo(0,350 + buffer[i * 4410] * 200);
+      canv.lineTo(1280,350 + buffer[i * 4410] * 200);
+        canv.stroke();
+        
+        //document.body.style.opacity = buffer[i * 441] * buffer[i * 441] * 40;
+//       console.log( buffer[i * 441] * buffer[i * 441] );
+    }, 100);
+        var i  = 0;
+        
+    setTimeout(function(){
+       // document.body.style.background = "black";
+        setTimeout(function () {
+            document.body.style.background = "white";
+        },1);
+        timer(1, peaksArray)},
+               peaksArray[0]);
+  });
+        
+
+    }, function () { console.error('The request failed.'); } );
+  }
+  
+  request.send();
+  }
+</script>
+</head>
+ <body>
+ <input type="button" value="Button" onClick='mixer("3.mp3", "1.mp3")'>
+     
+     <canvas id="canvas_line" width="1280" height="700">
+This text is displayed if your browser does not support HTML5 Canvas.
+</canvas>
+     
+</body>
+</html>
