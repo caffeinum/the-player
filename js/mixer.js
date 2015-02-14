@@ -5,29 +5,32 @@ var Mixer = function () {
 	this.current = null;
 	this.next = null;
     
+	var request, source;
 	var audio = null; // anything...
 	
+	this.load = function ( track ) {
+        source = context.createBufferSource();    
+        // use $.get !!
+        request = new XMLHttpRequest();
+        
+        request.open('GET', track.url, true); 
+        request.responseType = 'arraybuffer';
+		request.onload = this.play;
+        request.send();
+	};
+	
 	this.play = function () {
+		console.log( request );
         context.decodeAudioData(request.response, function(response) {
             source.buffer = response;
             //beatFind(source.buffer);
+			console.log( source );
             
-            source.start();
+            source.start(0);
         }, function () { console.error('The request failed.'); } );
     };
     
 	this.pause = function () {};
-	this.load = function ( track ) {
-        var source = context.createBufferSource();
-        
-        // use $.get !!
-        var request = new XMLHttpRequest();
-        
-        request.open('GET', track.url, true); 
-        request.responseType = 'arraybuffer';
-        request.send();
-	};
-	
 	this.prepare = function ( track ) {
 		// load track into the deck2
 
