@@ -8,7 +8,7 @@ window.onload = function (artwork1, artwork2) {
 	rec = new Recommender();
 	billy = new Track('music/track1.mp3', null);
 	
-	mixer.load( track );
+	mixer.load( billy );
 	mixer.play();
 	
 	player = {
