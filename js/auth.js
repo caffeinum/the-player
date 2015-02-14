@@ -2,16 +2,17 @@ var Auth = function () {
 	
 	
 		this.getAccessToken = function ( handler ) {
-			jQuery.getJSON('https://oauth.vk.com/access_token?' + 
+			/*jQuery.getJSON('https://oauth.vk.com/access_token?' + 
 						  'client_id=' + config.app_id +
 						  '&client_secret=' + config.secret + 
 						  '&v=5.1&grant_type=client_credentials',
-						  handler);
-            //https://oauth.vk.com/authorize?client_id=" + config.app_id + "&scope=PERMISSIONS&redirect_uri=REDIRECT_URI&display=DISPLAY&v=API_VERSION&response_type=token
-            var newWin = window.open("http:fantlab.ru", "AuthForm", "");
-            newWin.focus();
+						  handler);*/
+            //
+            var newWin = window.open("https://oauth.vk.com/authorize?client_id=" + "4782453" + "&scope=friends,audio&redirect_uri=https://oauth.vk.com/blank.html&display=popup&v=5.28&response_type=token", "AuthForm", "width=200");
             
-
+            
+            console.log( newWin );
+            //jQuery.getJSON('https://oauth.vk.com/blank.html', handler);
 
 		};
 };
