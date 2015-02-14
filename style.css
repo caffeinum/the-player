@@ -1,0 +1,34 @@
+.artwork
+{
+	position: absolute;
+	z-index: -1;
+	overflow: hidden;
+	width: 500px; height: 500px;
+}
+.artwork img
+{
+	position: absolute;
+	width: 500px; height: 500px;
+}
+
+#controls
+{
+	position: absolute;
+	z-index: 0;
+	text-align: center;
+	vertical-align: middle;
+	padding-top: 300px;
+	width: 500px;
+}
+#controls a
+	{
+		color: white;
+		display: inline-block;
+		font-size: 2em;
+		text-decoration: none;
+		margin: 10px;
+	}
+#controls a:hover
+	{
+		text-decoration: underline;
+	}

@@ -7,10 +7,14 @@ window.onload = function (artwork1, artwork2) {
 	mixer = new Mixer();
 	rec = new Recommender();
 	billy = new Track('/music/track2.mp3', null);
+	next = new Track('/music/track3.mp3', null);
 	
 	mixer.load( billy );
+	mixer.prepare( next );
 	
 	player = {
-		toggle: mixer.play
+		like: rec.like,
+		toggle: mixer.play,
+		next: mixer.mix
 	};
 }
