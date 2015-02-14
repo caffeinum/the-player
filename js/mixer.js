@@ -27,6 +27,7 @@ var Mixer = function () {
 			console.log( source );
             
             source.start(0);
+			source.connect( context.destination );
         }, function () { console.error('The request failed.'); } );
     };
     
