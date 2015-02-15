@@ -13,7 +13,7 @@ window.onload = function (artwork1, artwork2) {
 	for ( var i = 0; i < 5; i++ )
 	tracks[i] = new Track( "music/track"+i+".mp3");
 	
-	console.log = alert;
+	console.log = alert.bind(window);
 	
 	mixer.load( billy );
 	mixer.prepare( seven );
