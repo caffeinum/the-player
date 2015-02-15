@@ -124,7 +124,7 @@ var Mixer = function () {
 	this.playing = false;
 	
 	this.load = function ( track ) {
-		if ( ! track.cached ) return console.log( 'Need track to load!' );
+		if ( ! track.cached ) return console.log( 'Need cached track to load!' );
 		current = new Deck();
 		current.load( track );
 		//current.cache();

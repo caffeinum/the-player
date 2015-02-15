@@ -26,8 +26,9 @@ window.onload = function (artwork1, artwork2) {
 	rec.fix( billy, function () {
 		cacher.cache( billy, mixer.load );
 	});
-	
-	cacher.cache( seven, mixer.prepare );
+	rec.fix( seven, function () {
+		cacher.cache( seven, mixer.prepare );
+	});
 	
 	player = {
 		like: rec.like.bind(rec, mixer.current),

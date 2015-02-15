@@ -9,7 +9,8 @@ var Recommender = function (auth) {
         + track.metadata.name + "&format=json";
         jQuery.getJSON( url, function( data ) {
             //console.log( data );
-            return data.track.album.title;
+			track.metadata.album = data.track.album;
+            if ( handler ) handler( track );
         });
     };
 	this.like = function () {};
@@ -58,11 +59,11 @@ var Recommender = function (auth) {
 			this.getAudio( track, function (data) {
 				track.url = data.url;
 				// metadata
-				handler(track);
+				if ( handler ) handler(track);
 			});
 	};
 	
-    this.getAudio = function(track, handle){
+    this.getAudio = function(track, handler){
         //query to VK API
 		auth.request(
 			'audio.search',
@@ -72,7 +73,7 @@ var Recommender = function (auth) {
 			},
 			function (data) {
 				track.setURL( data.response[1].url );
-				handle( track );
+				if ( handler ) handler( track );
 			}
 		);
     };
