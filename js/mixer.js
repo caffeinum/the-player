@@ -70,13 +70,26 @@ var Mixer = function () {
 	Deck.prototype = {
 		load: function ( track ) {
 			this.track = track;
-			
+
 			if ( ! this.track ) return console.log( 'No track given' );
+			if ( ! this.track.cached ) {
+				cacher.cache( this.track );
+				return console.log( 'Track is not cached, caching' );
+			}
+			
+			this.source.buffer = ( cacher.getTrackBuffer( this.track ) );
+			this.source.connect( this.gain );
+			this.getBPM();
+
+
 		},
 		cache: function () {
 			var current = this;
 
-			if ( ! this.track.url ) return console.log( 'Cant cache dont loaded' );
+			current.source.buffer = cacher.getTrackBuffer( this.track );
+
+			if ( ! current.source.buffer )
+				return console.log( 'Cant cache dont loaded' );
 
 			current.request = new XMLHttpRequest();
 
@@ -85,8 +98,6 @@ var Mixer = function () {
 			current.request.onload = function () {
 				context.decodeAudioData(current.request.response, function( response ) {
 					current.source.buffer = response;
-					current.source.connect( current.gain );
-					current.getBPM();
 				}, function () { console.error('The request failed.'); } );
 			};
 			current.request.send();
@@ -110,20 +121,19 @@ var Mixer = function () {
 	this.playing = false;
 	
 	this.load = function ( track ) {
-		if ( ! track.url ) return console.log( 'Need track to load!' );
+		if ( ! track.cached ) return console.log( 'Need track to load!' );
 		current = new Deck();
 		current.load( track );
-		current.cache();
+		//current.cache();
 		
 		return;
 	};
 	
 	this.prepare = function ( track ) {
-		if ( ! track.url ) return console.log( 'Need next track to prepare!' );
+		if ( ! track.cached ) return console.log( 'Track not cached!' );
 		// load track into the deck2
 		next = new Deck();
 		next.load( track );
-		next.cache();
 		
 		return;		
     };

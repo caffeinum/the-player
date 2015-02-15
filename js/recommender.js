@@ -1,12 +1,12 @@
-var Recommender = function (access_token) {
+var Recommender = function (auth) {
 	// constructor
 	var TRACKS = this.tracks = [];
 	
-    var getAlbum = function (track, artist){
+    var getAlbum = function (track){
         var url = "http://ws.audioscrobbler.com/2.0"
         + "/?method=track.getInfo&api_key=ed03cd1154b880606783fb7d9dd35c75&artist="
-        + artist + "&track="
-        + track + "&format=json";
+        + track.metadata.artist.name + "&track="
+        + track.metadata.name + "&format=json";
         jQuery.getJSON( url, function( data ) {
             //console.log( data );
             return data.track.album.title;
@@ -25,17 +25,20 @@ var Recommender = function (access_token) {
         
         jQuery.getJSON( url, function( data ) {
             //console.log( data );
-            var track = new Track;
-            for(i=0;i++;i<5){
-                track.metadata.artist.name = data.similartracks.track[i].artist.name;
-                track.metadata.name = data.similartracks.track[i].name;
-                track.metadata.album.name = getAlbum(track.metadata.name, metadata.artist.name);
-                track.metadata.album.images = data.similartracks.track[i].images[3]["#text"];
-                track.metadata.match = data.similartracks.track[i].match;
-                //track.liked = true;
-                track.rating = /* Number(track.liked) */+Number(track.metadata.match);
-                TRACKS.push(track);
+            for(var i = 0; i++; i < 5) {
+				
+            var track = new Track();
                 
+				track.metadata.artist.name	= data.similartracks.track[i].artist.name;
+                track.metadata.name			= data.similartracks.track[i].name;
+                track.metadata.album.name 	= getAlbum( track );
+                track.metadata.album.images = data.similartracks.track[i].images[3]["#text"];
+                
+				track.metadata.match 		= data.similartracks.track[i].match;
+                //track.liked = true;
+                track.rating = /* Number(track.liked) */(track.metadata.match);
+				
+                TRACKS.push(track);
             };
         });
 	};
@@ -46,16 +49,23 @@ var Recommender = function (access_token) {
     
     this.sortByRating = function(){
         TRACKS.sort(function(track1, track2){
-            return track2.rating - track1.rating
+            return track2.rating - track1.rating;
         });
     };
     
-    this.getAudio = function(track, artist){
+    this.getAudio = function(track, handle){
         //query to VK API
-        var url = "https://api.vk.com/method/audio.search?q="+track+" "+artist+"&count=3&access_token=ACCESS_TOKEN"
-        jQuery.getJSON(encodeURI(url), function( data ) {
-           
-        });
+		auth.request(
+			'audio.search',
+			{
+				q: track.metadata.artist.name + ' ' + track.metadata.name,
+				count: 3
+			},
+			function (data) {
+				track.setURL( data.response[1].url );
+				handle( track );
+			}
+		);
     };
     
 };
