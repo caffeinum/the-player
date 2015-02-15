@@ -23,7 +23,7 @@ var Cacher = function () {
 		*///return req;
 		var request = new XMLHttpRequest();
 		
-		request.open('GET', root + '/base64?url=' + encodeURI(track.url), true); 
+		request.open('GET', root + '/server?url=' + encodeURI(track.url), true); 
 		request.responseType = 'arraybuffer';
 		request.onload = function () {
 			_STORAGE.setItem(
