@@ -35,6 +35,7 @@ var Mixer = function () {
         var intervalCounts = [];
         peaksArray.forEach(function(peak, index) {
             for(var i = 0; i < 10; i++) {
+					
                 var interval = peaksArray[index + i] - peak;
                 var foundInterval = intervalCounts.some(function(intervalCount) {
                     if (intervalCount.interval === interval)
@@ -73,19 +74,21 @@ var Mixer = function () {
 			
 			if ( ! this.track ) return console.log( 'No track given' );
 			if ( ! this.track.cached ) {
-				cacher.cache( this.track );
-				return console.log( 'Track is not cached, caching' );
+				//cacher.cache( this.track );
+				return console.log( 'Track is not cached' );
 			}
 			
-			var source = this.source;
-			context.decodeAudioData(cacher.getTrackBuffer( this.track ), function(audioData) {
-				source.buffer = audioData;
+			var deck = this;
+			context.decodeAudioData(deck.track.cachedBuffer, function(audioData) {
+				deck.source.buffer = audioData;
+				console.log( audioData );
+				deck.source.connect( deck.gain );
+				
+				deck.getBPM();
 			});
-			this.source.connect( this.gain );
-			this.getBPM();
 
 
-		},
+		},/*
 		cache: function () {
 			var current = this;
 
@@ -104,13 +107,14 @@ var Mixer = function () {
 				}, function () { console.error('The request failed.'); } );
 			};
 			current.request.send();
-		},
+		},*/
 		getBPM: function () {
 			//this.bpm = 110;
 			var current = this;
 			if ( this.bpm ) return this.bpm;
 			else console.log( 'BPM calculation in progress' );
 			
+			console.log(current.source);
 			low_rendering(current.source.buffer, function (filteredBuffer) {
 				current.bpm = beatFind(filteredBuffer);
 				console.log( current.track.url + " bpm is " + current.bpm );
@@ -142,7 +146,7 @@ var Mixer = function () {
     };
 	
 	this.play = function () {
-		this.playing = true;
+		this.playing = true;	
         current.source.start(0);
     };
 	this.pause = function () {
@@ -157,7 +161,7 @@ var Mixer = function () {
 			this.play();
 	};
 	this.getCurrent = function () {
-		return current.track;
+		return current;
 	};
 	this.getInfo = function () {
 		console.log(current, next);
@@ -169,6 +173,8 @@ var Mixer = function () {
 		if ( ! next.bpm ) return;
 		next.source.start(0);
 		next.gain.gain.value = 0;
+		
+		visual.setTrack( next.track );
 		/*
 		
         low_rendering(current.source.buffer, function (filteredBuffer) {
