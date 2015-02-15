@@ -15,7 +15,7 @@ var Recommender = function (auth) {
     };
 	this.like = function () {};
     this.getArtwork = function (track) {
-		return;
+		return track.metadata.album.images;
 	};
 	
 	this.pushNextTrack = function ( currentTrack ) {
