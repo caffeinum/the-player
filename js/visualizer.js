@@ -6,12 +6,13 @@ var Visualizer = function () {
 	this.setTrack = function (track) {
 		this.set(
 			track.metadata.artist.name,
-			track.metadata.name
+			track.metadata.name,
+            track.metadata.album
 		);
 	};
-	this.set = function (artist, track) {
+	this.set = function (artist, track, image) {
 		artistField.innerHTML = artist;
 		trackField.innerHTML = track;
-        albumImage.src = this.getArtwork(track);
+        albumImage.src = image;
 	};
 };
