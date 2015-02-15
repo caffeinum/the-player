@@ -148,6 +148,7 @@ var Mixer = function () {
 	this.mix = function () {
 		// skips to the deck2
 		if ( ! next ) return console.log( 'No next track prepared!' );
+		if ( ! next.bpm ) return;
 		next.source.start(0);
 		next.gain.gain.value = 0;
 		/*
@@ -176,10 +177,12 @@ var Mixer = function () {
 				current = next;
 				next	= new Deck();
 			
+				console.log( current.source.playbackRate.value, delta_n );
 				var equalize = setInterval( function () {
 					current.source.playbackRate.value += delta_n;
 					
-					if ( Math.abs( 1 - current.source.playbackRate.value ) < delta_n ) {
+					if ( Math.abs( 1 - current.source.playbackRate.value ) < Math.abs(delta_n) ) 
+					{
 						current.source.playbackRate.value = 1;
 						clearInterval( equalize );
 					}

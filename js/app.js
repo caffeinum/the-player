@@ -6,8 +6,8 @@ window.onload = function (artwork1, artwork2) {
 	
 	mixer = new Mixer();
 	rec = new Recommender();
-	billy = new Track('music/track3.mp3', null);
-	seven = new Track('music/track4.mp3', null);
+	billy = new Track('music/track5.mp3', null);
+	seven = new Track('music/track1.mp3', null);
 	
 	tracks = [];
 	for ( var i = 0; i < 5; i++ )
