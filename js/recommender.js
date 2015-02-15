@@ -53,6 +53,13 @@ var Recommender = function (auth) {
         });
     };
     
+	this.fix = function (track) {
+		if ( ! track.url )
+			this.getAudio( track, function (data) {
+				track.url = data.url;
+			});
+	};
+	
     this.getAudio = function(track, handle){
         //query to VK API
 		auth.request(
