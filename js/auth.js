@@ -19,8 +19,8 @@ var Auth = function () {
             var url = "https://oauth.vk.com/authorize?client_id=" + config.app_id + 
 				"&scope=friends,audio" +
 				"&redirect_uri=" +
-				"http://127.0.0.1:49866/test/redirect.html" +
-				"&display=popup&v=5.28&response_type=code";
+				"http://the-player-caffeinum.c9.io/web/test/redirect.html" +
+				"&display=popup&v=5.28&response_type=token";
             document.location = encodeURI( url );
 		};
 };
