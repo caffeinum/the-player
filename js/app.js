@@ -12,7 +12,6 @@ window.onload = function (artwork1, artwork2) {
 	rec		= new Recommender(auth);
 	visual	= new Visualizer();
 	
-<<<<<<< HEAD
 	billy = new Track(null, {artist:{name:'billy talent'},name:'fallen leaves'});
 	seven = new Track(null, {artist:{name:'white stripes'},name:'seven nation army'});
 	/*
@@ -32,10 +31,6 @@ window.onload = function (artwork1, artwork2) {
 	});
 	
 	
-=======
-	mixer.load( billy );
-	mixer.prepare( seven );
->>>>>>> parent of e2917db... Crossfade bpm no pitch
 	
 	player = {
 		like: rec.like.bind(rec, mixer.getCurrent()),
