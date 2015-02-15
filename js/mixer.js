@@ -70,14 +70,17 @@ var Mixer = function () {
 	Deck.prototype = {
 		load: function ( track ) {
 			this.track = track;
-
+			
 			if ( ! this.track ) return console.log( 'No track given' );
 			if ( ! this.track.cached ) {
 				cacher.cache( this.track );
 				return console.log( 'Track is not cached, caching' );
 			}
 			
-			this.source.buffer = ( cacher.getTrackBuffer( this.track ) );
+			var source = this.source;
+			context.decodeAudioData(cacher.getTrackBuffer( this.track ), function(audioData) {
+				source.buffer = audioData;
+			});
 			this.source.connect( this.gain );
 			this.getBPM();
 

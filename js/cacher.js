@@ -1,4 +1,5 @@
 var Cacher = function () {
+	var root = 'http://the-player-caffeinum.c9.io';
 	var cachedTracks = this.cachedTracks = [];
 	this.cache = function ( track, handler ) {
 		/*var scr = document.createElement('img');
@@ -22,12 +23,12 @@ var Cacher = function () {
 		*///return req;
 		var request = new XMLHttpRequest();
 		
-		request.open('GET', track.url, true); 
+		request.open('GET', root + '/base64?url=' + encodeURI(track.url), true); 
 		request.responseType = 'arraybuffer';
 		request.onload = function () {
 			_STORAGE.setItem(
 				JSON.stringify(track.metadata),
-				request.response
+				_arrayBufferToBase64(request.response)
 			);
 			track.cached = true;
 			cachedTracks.push( track );
@@ -39,13 +40,17 @@ var Cacher = function () {
 		var buffer;
 		
 		if ( buffer = _STORAGE.getItem( JSON.stringify(track.metadata) ) )
-			return buffer;
+			return _base64ToArrayBuffer(buffer);
 		else
 			console.log( 'Sorry, this track is not cached' );
 		return;
 	};
-	var _STORAGE = this.storage = (typeof(sessionStorage) == undefined) ?
-		(typeof(localStorage) == undefined) ? {
+	var _STORAGE = this.storage = 
+		
+		//(typeof(sessionStorage) == undefined) ?
+		//(typeof(localStorage) == undefined) ? 
+		
+		{
 			getItem: function(key){
 				return this.store[key];
 			},
@@ -62,5 +67,29 @@ var Cacher = function () {
 				}
 			},
 			store:{}
-    } : localStorage : sessionStorage;
+    }
+	
+	//: localStorage : sessionStorage;
 };
+
+
+// thanks to http://stackoverflow.com/users/1925574/luke-madhanga 
+function _arrayBufferToBase64( buffer ) {
+    var binary = '';
+    var bytes = new Uint8Array( buffer );
+    var len = bytes.byteLength;
+    for (var i = 0; i < len; i++) {
+        binary += String.fromCharCode( bytes[ i ] );
+    }
+    return window.btoa( binary );
+}	
+
+function _base64ToArrayBuffer(base64) {
+    var binary_string =  window.atob(base64);
+    var len = binary_string.length;
+    var bytes = new Uint8Array( len );
+    for (var i = 0; i < len; i++)        {
+        bytes[i] = binary_string.charCodeAt(i);
+    }
+    return bytes.buffer;
+}
