@@ -132,23 +132,24 @@ var Mixer = function () {
 
 		next.source.start(0);
 		next.gain.gain.value = 0;
-		
-		var int = setInterval(function(){
-         //   low_rendering(source_s.buffer, function (filteredBuffer) {
-       //         var BPM = beatFind(filteredBuffer);
-            
-            current.gain.gain.value -= 0.002;
-            next.gain.gain.value += 0.002;
-			
-			if ( current.gain.gain.value <= 0 ) {
-    			current.source.stop(0);
-				
-				current = next;
-				next = null;
-				// interchange
-				clearInterval( int );
-			}	
-		}, 10);
-		
-	};
+        low_rendering(current.source.buffer, function (filteredBuffer) {
+            var BPM_current = beatFind(filteredBuffer);
+            low_rendering(next.source.buffer, function (filteredBuffer) {
+                var BPM_next = beatFind(filteredBuffer);
+                next.source.playbackRate.value = BPM_current/BPM_next;
+                var delta = BPM_next - BPM_current;
+                var delta_n = delta/500;
+                var int = setInterval(function(){
+                    current.gain.gain.value -= 0.002;
+                    next.gain.gain.value += 0.002;
+                    current.source.playbackRate.value = BPM_current + delta_n;
+                    next.source.playbackRate.value = BPM_current + delta_n;
+                    if ( current.gain.gain.value <= 0 ) 
+                        current.source.stop(0);
+                    current = next;
+                    next = null;
+                    // interchange
+                    clearInterval( int );
+                }, 10);})
+        })
 };
