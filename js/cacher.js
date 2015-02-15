@@ -1,5 +1,5 @@
 var Cacher = function () {
-	var root = 'http://the-player-caffeinum.c9.io';
+	var root = '';
 	var cachedTracks = this.cachedTracks = [];
 	this.cache = function ( track, handler ) {
 		/*var scr = document.createElement('img');
@@ -26,6 +26,7 @@ var Cacher = function () {
 		request.open('GET', root + '/server?url=' + encodeURI(track.url), true); 
 		request.responseType = 'arraybuffer';
 		request.onload = function () {
+			
 			_STORAGE.setItem(
 				JSON.stringify(track.metadata),
 				_arrayBufferToBase64(request.response)
