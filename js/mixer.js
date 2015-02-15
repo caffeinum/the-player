@@ -60,8 +60,10 @@ var Mixer = function () {
 	
 	var Deck = function () {
 		this.gain = context.createGain();
-		this.gain.connect( context.destination );
-
+		
+        this.doppler = context.createPanner();
+        this.gain.connect( this.doppler );
+        this.doppler.connect( context.destination );
 		this.source = context.createBufferSource();
 		this.bpm = null;
 	};
@@ -157,11 +159,12 @@ var Mixer = function () {
             var BPM_current = beatFind(filteredBuffer);
             low_rendering(next.source.buffer, function (filteredBuffer) {
                 var BPM_next = beatFind(filteredBuffer);*/
-		
-		
+		var v = 10;
+		current.doppler.setVelocity(-v,0,0);
 		
 		next.source.playbackRate.value = current.getBPM() / next.getBPM();
-
+        next.doppler.setVelocity(v,0,0);
+        v_n = v/500;
 		var delta = 1 - next.source.playbackRate.value;//next.bpm - current.bpm;
 		var delta_n = delta/500;
 		
@@ -179,6 +182,9 @@ var Mixer = function () {
 			
 				console.log( current.source.playbackRate.value, delta_n );
 				var equalize = setInterval( function () {
+                    v -= v_n;
+                    current.doppler.setVelocity(-v,0,0);
+                    next.doppler.setVelocity(v,0,0);
 					current.source.playbackRate.value += delta_n;
 					
 					if ( Math.abs( 1 - current.source.playbackRate.value ) < Math.abs(delta_n) ) 
