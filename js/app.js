@@ -9,6 +9,11 @@ window.onload = function (artwork1, artwork2) {
 	billy = new Track('/music/track3.mp3', null);
 	seven = new Track('/music/track4.mp3', null);
 	
+	tracks = [];
+	for ( var i = 0; i < 5; i++ )
+	tracks[i] = new Track( "../music/track"+i+".mp3");
+	
+	
 	mixer.load( billy );
 	mixer.prepare( seven );
 	
