@@ -30,8 +30,10 @@ window.onload = function (artwork1, artwork2) {
 		cacher.cache( seven, mixer.prepare );
 	});
 	
+	
+	
 	player = {
-		like: rec.like.bind(rec, mixer.current),
+		like: rec.like.bind(rec, mixer.getCurrent()),
 		toggle: mixer.toggle.bind(mixer),
 		next: mixer.mix.bind(mixer)
 	};

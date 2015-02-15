@@ -14,7 +14,10 @@ var Recommender = function (auth) {
         });
     };
 	this.like = function () {};
-    
+    this.getArtwork = function (track) {
+		return;
+	};
+	
 	this.pushNextTrack = function ( currentTrack ) {
 		// get tracks
         var artist = currentTrack.metadata.artist.name;

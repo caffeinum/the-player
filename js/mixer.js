@@ -156,6 +156,9 @@ var Mixer = function () {
 		else
 			this.play();
 	};
+	this.getCurrent = function () {
+		return current.track;
+	};
 	this.getInfo = function () {
 		console.log(current, next);
 		console.log(current.track, next.track);

@@ -29,7 +29,7 @@ var Cacher = function () {
 			
 			_STORAGE.setItem(
 				JSON.stringify(track.metadata),
-				_arrayBufferToBase64(request.response)
+				request.response
 			);
 			track.cached = true;
 			cachedTracks.push( track );
@@ -39,9 +39,9 @@ var Cacher = function () {
 	};
 	this.getTrackBuffer = function ( track ) {
 		var buffer;
-		
-		if ( buffer = _STORAGE.getItem( JSON.stringify(track.metadata) ) )
-			return _base64ToArrayBuffer(buffer);
+		console.log(JSON.stringify(track.metadata));
+		if ( buffer = _STORAGE.getItem( JSON.stringify(track.metadata) ) ){
+		console.log(typeof(buffer)); return _base64ToArrayBuffer(buffer);}
 		else
 			console.log( 'Sorry, this track is not cached' );
 		return;
@@ -86,6 +86,7 @@ function _arrayBufferToBase64( buffer ) {
 }	
 
 function _base64ToArrayBuffer(base64) {
+	console.log(base64);
     var binary_string =  window.atob(base64);
     var len = binary_string.length;
     var bytes = new Uint8Array( len );
