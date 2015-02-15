@@ -6,6 +6,7 @@ var Mixer = function () {
 		this.gain.connect( context.destination );
 
 		this.source = context.createBufferSource();
+		this.bpm = null;
 	};
 	Deck.prototype = {
 		load: function ( track ) {
@@ -27,6 +28,12 @@ var Mixer = function () {
 				}, function () { console.error('The request failed.'); } );
 			};
 			current.request.send();
+		},
+		getBPM: function () {
+			this.bpm = 110;
+			
+			
+			return this.bpm;
 		}
 	};
 
@@ -90,7 +97,7 @@ var Mixer = function () {
             if(intervalCounts[i].interval >= 1500 && intervalCounts[i].interval <= 5000) break;
         var BPM = (4*60000/intervalCounts[i].interval);
         return BPM;
-}
+	}
     
     
 	this.playing = false;
@@ -152,4 +159,6 @@ var Mixer = function () {
                     clearInterval( int );
                 }, 10);})
         })
+		
+	};
 };
