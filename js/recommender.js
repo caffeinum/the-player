@@ -53,10 +53,12 @@ var Recommender = function (auth) {
         });
     };
     
-	this.fix = function (track) {
+	this.fix = function (track, handler) {
 		if ( ! track.url )
 			this.getAudio( track, function (data) {
 				track.url = data.url;
+				// metadata
+				handler(track);
 			});
 	};
 	

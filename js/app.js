@@ -12,8 +12,8 @@ window.onload = function (artwork1, artwork2) {
 	rec		= new Recommender(auth);
 	visual	= new Visualizer();
 	
-	billy = new Track('music/track3.mp3', {artist:{name:'billy talent'},name:'fallen leaves'});
-	seven = new Track('music/track1.mp3', null);
+	billy = new Track(null, {artist:{name:'billy talent'},name:'fallen leaves'});
+	seven = new Track(null, {artist:{name:'white stripes'},name:'seven nation army'});
 	/*
 	rec.pushNextTrack(billy);
 	rec.getAudio(billy, mixer.load);
@@ -23,8 +23,10 @@ window.onload = function (artwork1, artwork2) {
 	tracks[i] = new Track( "music/track"+i+".mp3");
 	
 	//console.log = alert.bind(window);
+	rec.fix( billy, function () {
+		cacher.cache( billy, mixer.load );
+	});
 	
-	cacher.cache( billy, mixer.load );
 	cacher.cache( seven, mixer.prepare );
 	
 	player = {
