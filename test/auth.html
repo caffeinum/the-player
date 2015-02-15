@@ -7,7 +7,15 @@
 		<script type="text/javascript" src="../js/auth.js"></script>
 	</head>
 <body>
-	<script type="text/javascript">
+	
+    <script src="http://vk.com/js/api/openapi.js" type="text/javascript"></script>
+    <script type="text/javascript">
+    VK.init({
+    apiId: 4781852
+    });
+    </script>
+    
+    <!--<script type="text/javascript">
 		window.onload = function () {
 			var a = new Auth();
 			a.getAccessToken( function (token) {
@@ -15,7 +23,9 @@
 			});
 		}
 	
-	</script>
+	</script>-->
+    
+    
 	
 </body>
 </html>
