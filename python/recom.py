@@ -23,14 +23,11 @@ def check_audios(audio1, audio2): #return 1 if audio1 is similar
         a = format(audio1)
         b = format(audio2)
         c = ['l', 'a', 't', 'd'] #check_box
-        dur_delta = abs(a['duration']-b['duration'])
         if a['lyrics_id'] == b['lyrics_id']:
                 return 1
-        else: pass
-        if (a['artist'], a['title']) == (b['artist'], b['title']) and dur_delta < 5:
-                return 1
-        else:
-                return 0
+        dur_delta = abs(a['duration']-b['duration'])
+        return (1 if (a['artist'], a['title']) == (b['artist'], b['title'])
+                and dur_delta < 5 else 0)
 
 def append_global(what, where): #add new items to arr and 
         flag = 1
@@ -43,7 +40,6 @@ def append_global(what, where): #add new items to arr and
                         where[0][i] += 1
         if flag == 1:
                 where[1].append(what)
-        else: pass
 
 def printd(dictionary):
         print json.dumps(dictionary, sort_keys=True, indent=4)
